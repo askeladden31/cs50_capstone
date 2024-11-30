@@ -1,0 +1,33 @@
+{% extends "movies/layout.html" %}
+
+{% block body %}
+<h1>Want To Watch</h1>
+
+<div class="container ">
+
+  {% for movie, flag in movies %}
+  <div class="row">
+    <div class="col-6">
+      {{ movie }}
+    </div>
+    <div class="col-2">
+      <a href="{% url 'movie_graph' movie.id %}">general page</a>
+    </div>
+    <div class="col-2">
+      {% if flag %}
+      <a href="{% url 'user_movie' movie.id user.id %}">user page</a>
+      {% endif %}
+    </div>
+	<div class="col-1">
+      <a href="#" onclick="watchlist_handler(this, {{ movie.id }}, '{% url 'watched' movie.id %}', 0)">I watched this!</a>
+    </div>
+    <div class="col-1">
+      <a href="{% url 'want_to_watch_remove' movie.id %}">remove</a>
+    </div>
+  </div>
+
+  {% endfor %}
+
+</div>
+
+{% endblock %}

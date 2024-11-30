@@ -1,0 +1,70 @@
+{% extends "movies/layout.html" %}
+
+{% load static %} 
+
+{% block body %}
+      <div id="container">
+        <svg viewBox="0 0 {{ graph_width }} {{ graph_height }}">
+		</svg><!--
+        --><div id="panel">
+          <div id="movie_panel">
+            <p>Popular connections for {{ movie.title }} ({{ movie.year }})</p>
+            <p>
+			<button data-id="{{ movie.id }}" onclick="showSearchForm(this)">add connection</button> | 
+			
+			add to watchlist | 
+			add to watched			
+			</p>           
+			<p>
+			write review
+			</p>
+          </div>
+          <div id="connected_panel" style="opacity:0">
+            <p>
+			<span id="connection"></span>
+			</p>
+            <p>
+				<a id="title_year">movie (year)</a>
+			</p>
+            <p>
+				<button id="connected_add" onclick="showSearchForm(this)">add connection</button> | 
+				
+				add to watchlist | 
+				add to watched
+				
+				</p>
+	          </div>
+		  </div>
+    
+      <div id="tooltip_svg_01" style="opacity:0">
+        <p><strong>Important Label Heading</strong></p>
+        <p><span id="value_tt_01">None</span></p>
+        <p><a id="link_tt_01" href="" >None</a></p>		  
+	  </div>
+
+      <div class="form-popup" id="myForm">
+        <form action="{% url 'add_connection' %}" method="POST" class="form-container" autocomplete="off">
+          {% csrf_token %}
+          <div id="searchbar">
+            <input type="text" id="autocomplete" placeholder="Search" name="query">
+            <ul id="results"></ul>
+            <p id="warning"></p>
+            <input type="hidden" name="movie1" id="movie1">
+            <input type="hidden" name="movie2" id="movie2">
+          </div>
+          <div id="description">
+            <input type="textarea" placeholder="Description" name="conn_dsc" required>  
+            <button type="submit" class="btn">Add</button>
+          </div>
+          <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+        </form>
+      </div>
+	  
+      <script>
+        var graph_width = {{ graph_width }};
+        var graph_height = {{ graph_height }};
+        var movie_id = {{ movie.id }};
+		const fetch_url = {{ fetch_url }};
+      </script>
+      <script src="{% static 'movies/user_movie_graph.js' %}"></script>
+{% endblock %}

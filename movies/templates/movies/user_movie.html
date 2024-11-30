@@ -1,0 +1,72 @@
+{% extends 'movies/layout.html' %}
+
+{% load static %}
+
+{% block body %}
+  <div id="container">
+    <svg viewBox="0 0 {{ graph_width }} {{ graph_height }}">
+    </svg><!--
+    --><div id="panel">
+      <div id="movie_panel">
+        <p>{{ user.username }}'s page for <a href="{{ movie.general_url }}">{{ movie.title }} ({{ movie.year }})</a></p>
+        <p>
+          <button data-id="{{ movie.id }}" onclick="showSearchForm(this)">add connection</button> |
+          <a href="{% url 'movie' movie.id %}">go to general page</a> |
+          <button class="button_off" id="main_wannawatch" onclick="wannawatch({{ movie.id }})">wanna watch</button> |
+          <button class="button_on" id="main_watched" onclick="watched({{ movie.id }})">watched</button>
+        </p>
+        <p>
+          write review
+        </p>
+      </div>
+      <div id="connected_panel" style="opacity:0">
+        <p>
+          <span id="connection"></span>
+        </p>
+        <p>
+          <a id="title_year">movie (year)</a>
+        </p>
+        <p>
+          <button id="connected_add" onclick="showSearchForm(this)">add connection</button> | 
+          <a id="connected_general">go to general page</a> | 
+          <a id="connected_watchlist">watchlist</a> | 
+          <a id="connected_watched">watched</a> | 
+		  <button id="connected_remove" onclick="removeConnection()">remove</button>
+        </p>
+      </div>
+    </div>
+    <div id="tooltip_svg_01" style="opacity:0">
+      <p><strong>Important Label Heading</strong></p>
+      <p><span id="value_tt_01">None</span></p>
+      <p><a id="link_tt_01" href="">None</a></p>
+    </div>
+
+    <div class="form-popup" id="myForm">
+      <form action="{% url 'add_connection' %}" method="POST" class="form-container" autocomplete="off">
+        {% csrf_token %}
+        <div id="searchbar">
+          <input type="text" id="autocomplete" placeholder="Search" name="query">
+          <ul id="results"></ul>
+          <p id="warning"></p>
+          <input type="hidden" name="movie1" id="movie1">
+          <input type="hidden" name="movie2" id="movie2">
+        </div>
+        <div id="description">
+          <input type="textarea" placeholder="Description" name="conn_dsc" required>
+          <button type="submit" class="btn">Add</button>
+        </div>
+        <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+      </form>
+    </div>
+
+    <script>
+      const graph_width = {{ graph_width }};
+      const graph_height = {{ graph_height }};
+      const user_id = {{ user.id }};
+      const movie_id = {{ movie.id }};
+	  const fetch_url = {{ fetch_url }};						  
+    </script>
+    <script src="{% static 'movies/user_movie_graph.js' %}"></script>
+
+
+{% endblock %}

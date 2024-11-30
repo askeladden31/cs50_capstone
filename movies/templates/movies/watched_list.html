@@ -1,0 +1,32 @@
+{% extends "movies/layout.html" %}
+
+{% block body %}
+<h1>Watched</h1>
+
+<div class="container ">
+
+  {% for movie, flag in movies %}
+  <div class="row">
+    <div class="col-6">
+      {{ movie }}
+    </div>
+    <div class="col-2">
+      <a href="{% url 'movie' movie.id %}">general page</a>
+    </div>
+    <div class="col-2">
+      {% if flag %}
+      <a href="{% url 'user_movie' movie.id user.id %}">user page</a>
+      {% endif %}
+    </div>
+    <div class="col-2">
+	  {% if request.user == user %}
+      <a href="{% url 'watched_remove' movie.id %}">remove</a>
+	  {% endif %}
+    </div>
+  </div>
+
+  {% endfor %}
+
+</div>
+
+{% endblock %}
